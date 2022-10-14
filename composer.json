@@ -1,5 +1,5 @@
 {
-    "name": "illuminate/collections",
+    "name": "liuding/collections",
     "description": "The Illuminate Collections package.",
     "license": "MIT",
     "homepage": "https://laravel.com",
@@ -14,10 +14,10 @@
         }
     ],
     "require": {
-        "php": "^8.1",
-        "illuminate/conditionable": "^10.0",
-        "illuminate/contracts": "^10.0",
-        "illuminate/macroable": "^10.0"
+        "php": "^7.0 || ^8.0"
+    },
+    "require-dev": {
+        "symfony/var-dumper": "3.4.x-dev"
     },
     "autoload": {
         "psr-4": {

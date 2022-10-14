@@ -2,7 +2,6 @@
 
 namespace Illuminate\Support;
 
-use ArgumentCountError;
 use ArrayAccess;
 use Illuminate\Support\Traits\Macroable;
 use InvalidArgumentException;
@@ -503,7 +502,7 @@ class Arr
     {
         $results = [];
 
-        [$value, $key] = static::explodePluckParameters($value, $key);
+        list($value, $key) = static::explodePluckParameters($value, $key);
 
         foreach ($array as $item) {
             $itemValue = data_get($item, $value);
@@ -556,7 +555,7 @@ class Arr
 
         try {
             $items = array_map($callback, $array, $keys);
-        } catch (ArgumentCountError) {
+        } catch (/** ArgumentCountError */ \Error $e) {
             $items = array_map($callback, $array);
         }
 

@@ -3,14 +3,14 @@
 use Illuminate\Support\Arr;
 use Illuminate\Support\Collection;
 
-if (! function_exists('collect')) {
+if (!function_exists('collect')) {
     /**
      * Create a collection from the given value.
      *
      * @template TKey of array-key
      * @template TValue
      *
-     * @param  \Illuminate\Contracts\Support\Arrayable<TKey, TValue>|iterable<TKey, TValue>|null  $value
+     * @param \Illuminate\Support\Contracts\Arrayable<TKey, TValue>|iterable<TKey, TValue>|null $value
      * @return \Illuminate\Support\Collection<TKey, TValue>
      */
     function collect($value = null)
@@ -19,13 +19,13 @@ if (! function_exists('collect')) {
     }
 }
 
-if (! function_exists('data_fill')) {
+if (!function_exists('data_fill')) {
     /**
      * Fill in data where it's missing.
      *
-     * @param  mixed  $target
-     * @param  string|array  $key
-     * @param  mixed  $value
+     * @param mixed $target
+     * @param string|array $key
+     * @param mixed $value
      * @return mixed
      */
     function data_fill(&$target, $key, $value)
@@ -34,13 +34,13 @@ if (! function_exists('data_fill')) {
     }
 }
 
-if (! function_exists('data_get')) {
+if (!function_exists('data_get')) {
     /**
      * Get an item from an array or object using "dot" notation.
      *
-     * @param  mixed  $target
-     * @param  string|array|int|null  $key
-     * @param  mixed  $default
+     * @param mixed $target
+     * @param string|array|int|null $key
+     * @param mixed $default
      * @return mixed
      */
     function data_get($target, $key, $default = null)
@@ -61,7 +61,7 @@ if (! function_exists('data_get')) {
             if ($segment === '*') {
                 if ($target instanceof Collection) {
                     $target = $target->all();
-                } elseif (! is_iterable($target)) {
+                } elseif (!is_iterable($target)) {
                     return value($default);
                 }
 
@@ -87,14 +87,14 @@ if (! function_exists('data_get')) {
     }
 }
 
-if (! function_exists('data_set')) {
+if (!function_exists('data_set')) {
     /**
      * Set an item on an array or object using dot notation.
      *
-     * @param  mixed  $target
-     * @param  string|array  $key
-     * @param  mixed  $value
-     * @param  bool  $overwrite
+     * @param mixed $target
+     * @param string|array $key
+     * @param mixed $value
+     * @param bool $overwrite
      * @return mixed
      */
     function data_set(&$target, $key, $value, $overwrite = true)
@@ -102,7 +102,7 @@ if (! function_exists('data_set')) {
         $segments = is_array($key) ? $key : explode('.', $key);
 
         if (($segment = array_shift($segments)) === '*') {
-            if (! Arr::accessible($target)) {
+            if (!Arr::accessible($target)) {
                 $target = [];
             }
 
@@ -117,22 +117,22 @@ if (! function_exists('data_set')) {
             }
         } elseif (Arr::accessible($target)) {
             if ($segments) {
-                if (! Arr::exists($target, $segment)) {
+                if (!Arr::exists($target, $segment)) {
                     $target[$segment] = [];
                 }
 
                 data_set($target[$segment], $segments, $value, $overwrite);
-            } elseif ($overwrite || ! Arr::exists($target, $segment)) {
+            } elseif ($overwrite || !Arr::exists($target, $segment)) {
                 $target[$segment] = $value;
             }
         } elseif (is_object($target)) {
             if ($segments) {
-                if (! isset($target->{$segment})) {
+                if (!isset($target->{$segment})) {
                     $target->{$segment} = [];
                 }
 
                 data_set($target->{$segment}, $segments, $value, $overwrite);
-            } elseif ($overwrite || ! isset($target->{$segment})) {
+            } elseif ($overwrite || !isset($target->{$segment})) {
                 $target->{$segment} = $value;
             }
         } else {
@@ -149,11 +149,11 @@ if (! function_exists('data_set')) {
     }
 }
 
-if (! function_exists('head')) {
+if (!function_exists('head')) {
     /**
      * Get the first element of an array. Useful for method chaining.
      *
-     * @param  array  $array
+     * @param array $array
      * @return mixed
      */
     function head($array)
@@ -162,11 +162,11 @@ if (! function_exists('head')) {
     }
 }
 
-if (! function_exists('last')) {
+if (!function_exists('last')) {
     /**
      * Get the last element from an array.
      *
-     * @param  array  $array
+     * @param array $array
      * @return mixed
      */
     function last($array)
@@ -175,15 +175,74 @@ if (! function_exists('last')) {
     }
 }
 
-if (! function_exists('value')) {
+if (!function_exists('value')) {
     /**
      * Return the default value of the given value.
      *
-     * @param  mixed  $value
+     * @param mixed $value
      * @return mixed
      */
     function value($value, ...$args)
     {
         return $value instanceof Closure ? $value(...$args) : $value;
+    }
+}
+
+
+if (!function_exists("array_is_list")) {
+    function array_is_list(array $array): bool
+    {
+        $i = 0;
+        foreach ($array as $k => $v) {
+            if ($k !== $i++) {
+                return false;
+            }
+        }
+        return true;
+    }
+}
+
+if (!function_exists("str_contains")) {
+    function str_contains(string $str): bool
+    {
+        return strpos($str, '.') !== false;
+    }
+}
+
+
+if (!function_exists('is_iterable')) {
+    function is_iterable($obj)
+    {
+        return is_array($obj) || (is_object($obj) && ($obj instanceof \Traversable));
+    }
+}
+
+
+if (! function_exists('class_basename')) {
+    /**
+     * Get the class "basename" of the given object / class.
+     *
+     * @param  string|object  $class
+     * @return string
+     */
+    function class_basename($class)
+    {
+        $class = is_object($class) ? get_class($class) : $class;
+
+        return basename(str_replace('\\', '/', $class));
+    }
+}
+
+if (! function_exists('e')) {
+    /**
+     * Encode HTML special characters in a string.
+     *
+     * @param  \Illuminate\Contracts\Support\DeferringDisplayableValue|\Illuminate\Contracts\Support\Htmlable|\BackedEnum|string|null  $value
+     * @param  bool  $doubleEncode
+     * @return string
+     */
+    function e($value, $doubleEncode = true)
+    {
+        return htmlspecialchars($value ?? '', ENT_QUOTES, 'UTF-8', $doubleEncode);
     }
 }
